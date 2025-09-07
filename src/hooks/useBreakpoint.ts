@@ -1,48 +1,29 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { BreakpointEnum, StaticBreakpoint } from "../const/breakpoints";
+import { useMemo } from "react";
+import { useSyncExternalStore } from 'react';
+import { BreakpointEnum, StaticBreakpoint, BREAKPOINT_ORDER, BreakpointValue } from "../const/breakpoints";
+import { mediaQueryStore } from "../core/mediaQueryStore";
 import { getCurrentBreakpoint } from "../helpers/getCurrentBreakpoint";
-import { getMediaQuery } from "../helpers/getMediaQuery";
 
 /**
  * Custom hook to get the current active breakpoint.
  * @returns The current active breakpoint.
  */
 export function useBreakpoint(): StaticBreakpoint {
-	const [bp, setBp] = useState<StaticBreakpoint>(() => getCurrentBreakpoint());
-
-	const mqls = useMemo(() => {
-		if (typeof window === 'undefined') return [];
-
+	// Suscríbete a todos los límites min-width, el snapshot calcula el label vigente
+	const queries = useMemo(() => {
 		const entries = Object.entries(BreakpointEnum) as [StaticBreakpoint, string][];
 		return entries
 			.filter(([label]) => label !== 'xs')
-			.map(([label, size]) => ({
-				label,
-				mql: getMediaQuery(`(min-width: ${size})`)
-			}));
+			.map(([, size]) => `(min-width: ${size})`);
 	}, []);
 
-	const handler = useCallback(() => {
-		const newBp = getCurrentBreakpoint();
-		setBp(current => current === newBp ? current : newBp);
-	}, []);
+	const subscribe = (onChange: () => void) => {
+		const unsubscribers = queries.map((q) => mediaQueryStore.subscribe(q, onChange));
+		return () => unsubscribers.forEach((u) => u());
+	};
 
-	useEffect(() => {
-		if (typeof window === 'undefined') return;
+	const getSnapshot = () => getCurrentBreakpoint();
+	const getServerSnapshot = () => 'xs' as StaticBreakpoint;
 
-		mqls.forEach(({ mql }) => {
-			mql.addEventListener('change', handler);
-		});
-
-		// Initial check
-		handler();
-
-		return () => {
-			mqls.forEach(({ mql }) => {
-				mql.removeEventListener('change', handler);
-			});
-		};
-	}, [mqls, handler]);
-
-	return bp;
+	return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

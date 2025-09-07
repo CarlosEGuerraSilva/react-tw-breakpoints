@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "useBreakpoint hooks and tw-based components.",
   "main": "dist/index.js",
-  "module": "dist/index.esm.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
@@ -11,6 +11,7 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --minify"
   },
+  "sideEffects": false,
   "keywords": [
     "react",
     "tailwind",

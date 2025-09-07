@@ -1,7 +1,7 @@
-
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { BreakpointContainerEnum } from "../const/breakpoints";
-import { StaticBreakpointContainer } from "../const/breakpoints";
+import { useMemo } from "react";
+import { useSyncExternalStore } from 'react';
+import { BreakpointContainerEnum, StaticBreakpointContainer } from "../const/breakpoints";
+import { mediaQueryStore } from "../core/mediaQueryStore";
 import { getMediaQuery } from "../helpers/getMediaQuery";
 
 /**
@@ -9,51 +9,30 @@ import { getMediaQuery } from "../helpers/getMediaQuery";
  * @returns The current active container breakpoint.
  */
 export function useBreakpointContainer(): StaticBreakpointContainer {
-	const getActiveBreakpoint = useCallback((): StaticBreakpointContainer => {
+	const getActiveBreakpoint = () => {
 		if (typeof window === 'undefined') return 'xs';
-
 		const entries = Object.entries(BreakpointContainerEnum) as [StaticBreakpointContainer, string][];
 		const active = entries
 			.filter(([_, size]) => getMediaQuery(`(min-width: ${size})`).matches)
 			.map(([label]) => label)
 			.pop();
-		return active ?? 'xs';
-	}, []);
+		return (active ?? 'xs') as StaticBreakpointContainer;
+	};
 
-	const [bp, setBp] = useState<StaticBreakpointContainer>(() => getActiveBreakpoint());
-
-	const mqls = useMemo(() => {
-		if (typeof window === 'undefined') return [];
-
+	const queries = useMemo(() => {
 		const entries = Object.entries(BreakpointContainerEnum) as [StaticBreakpointContainer, string][];
 		return entries
 			.filter(([label]) => label !== 'xs')
-			.map(([label, size]) => ({
-				label,
-				mql: getMediaQuery(`(min-width: ${size})`)
-			}));
+			.map(([, size]) => `(min-width: ${size})`);
 	}, []);
 
-	const handler = useCallback(() => {
-		const newBp = getActiveBreakpoint();
-		setBp(current => current === newBp ? current : newBp);
-	}, [getActiveBreakpoint]);
+	const subscribe = (onChange: () => void) => {
+		const unsubscribers = queries.map((q) => mediaQueryStore.subscribe(q, onChange));
+		return () => unsubscribers.forEach((u) => u());
+	};
 
-	useEffect(() => {
-		if (typeof window === 'undefined') return;
+	const getSnapshot = getActiveBreakpoint;
+	const getServerSnapshot = () => 'xs' as StaticBreakpointContainer;
 
-		mqls.forEach(({ mql }) => {
-			mql.addEventListener('change', handler);
-		});
-
-		handler();
-
-		return () => {
-			mqls.forEach(({ mql }) => {
-				mql.removeEventListener('change', handler);
-			});
-		};
-	}, [mqls, handler]);
-
-	return bp;
+	return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
