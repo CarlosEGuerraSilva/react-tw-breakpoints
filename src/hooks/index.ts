@@ -5,3 +5,4 @@ export * from './useBreakpointCondition';
 // Container breakpoint hooks
 export * from './useBreakpointContainer';
 export * from './useBreakpointContainerCondition';
+export * from './useContainerBreakpoint';
