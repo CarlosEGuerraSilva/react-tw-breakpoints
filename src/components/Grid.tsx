@@ -26,10 +26,29 @@ const VALID_GAPS = [
   48, 52, 56, 60, 64, 72, 80, 96,
 ] as const;
 
+// Mapeo de columnas a porcentajes para flexbox
+const COL_TO_BASIS: Record<number, string> = {
+  1: "basis-1/12",
+  2: "basis-2/12",
+  3: "basis-3/12",
+  4: "basis-4/12",
+  5: "basis-5/12",
+  6: "basis-6/12",
+  7: "basis-7/12",
+  8: "basis-8/12",
+  9: "basis-9/12",
+  10: "basis-10/12",
+  11: "basis-11/12",
+  12: "basis-full",
+};
+
 const buildClasses = (prop?: ResponsiveProp, type: "col" | "gap" = "col") => {
-  if (!prop) return type === "col" ? ["col-span-12"] : [];
-  if (typeof prop === "number")
-    return [type === "col" ? `col-span-${prop}` : `gap-${prop}`];
+  if (!prop) return type === "col" ? ["basis-full"] : [];
+  if (typeof prop === "number") {
+    return type === "col"
+      ? [COL_TO_BASIS[prop] || "basis-full"]
+      : [`gap-${prop}`];
+  }
 
   const classes: string[] = [];
   for (const [bp, v] of Object.entries(prop)) {
@@ -39,11 +58,14 @@ const buildClasses = (prop?: ResponsiveProp, type: "col" | "gap" = "col") => {
       (type === "col" && VALID_COL_SPANS.includes(val as any)) ||
       (type === "gap" && VALID_GAPS.includes(val as any));
     if (!valid) continue;
-    classes.push(
-      `${breakpointPrefix[bp as Breakpoint]}${
-        type === "col" ? `col-span-${val}` : `gap-${val}`
-      }`
-    );
+
+    if (type === "col") {
+      const basisClass = COL_TO_BASIS[val] || "basis-full";
+      const prefix = breakpointPrefix[bp as Breakpoint];
+      classes.push(`${prefix}${basisClass}`);
+    } else {
+      classes.push(`${breakpointPrefix[bp as Breakpoint]}gap-${val}`);
+    }
   }
   return classes;
 };
@@ -60,7 +82,7 @@ const Grid: React.FC<GridProps> = ({
 
   if (container) {
     return (
-      <div className={`grid grid-cols-12 ${gapClasses} ${className}`.trim()}>
+      <div className={`flex flex-wrap ${gapClasses} ${className}`.trim()}>
         {children}
       </div>
     );

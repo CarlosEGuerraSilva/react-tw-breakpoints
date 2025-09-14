@@ -183,12 +183,14 @@ export function Page() {
 </Container>
 ```
 
-## Grid (inspired by MUI Grid v2)
+##
 
-A 12‑column CSS grid built with Tailwind utilities. Works as either:
+Grid (inspired by MUI Grid v2)
 
-- container = true → grid container (`grid grid-cols-12`) with optional responsive gaps
-- container = false → grid item that sets its `col-span-*` responsively
+A 12‑column flexbox layout built with Tailwind utilities. Works as either:
+
+- container = true → flex container (`flex flex-wrap`) with optional responsive gaps
+- container = false → flex item that sets its `basis-*` responsively
 
 Props:
 
@@ -203,6 +205,7 @@ Props:
 Notes:
 
 - `xs` maps to the base class without a prefix; other breakpoints use `sm:`, `md:`, etc.
+- Uses flexbox with `basis-*` classes to create 12-column responsive layouts
 - This is not a 1:1 clone of MUI v2 Grid, but aims for a similar ergonomics.
 
 Examples:
@@ -267,28 +270,15 @@ export function Cards() {
 </Grid>
 ```
 
-Tailwind safelist tip (required if classes are generated from JS props):
+Tailwind safelist
 
-- If you consume this library inside an app that purges CSS, safelist the grid classes used by dynamic props:
+- If you consume Container or Grid they work out of the box. You may need to add these safelist to your app.css file.
 
-```js
-// tailwind.config.js
-const gapValues = [
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 20, 24, 28, 32, 36, 40, 44,
-  48, 52, 56, 60, 64, 72, 80, 96,
-];
-const colValues = Array.from({ length: 12 }, (_, i) => i + 1);
-const bps = ["sm", "md", "lg", "xl", "2xl"];
-
-module.exports = {
-  // ...
-  safelist: [
-    ...colValues.map((n) => `col-span-${n}`),
-    ...bps.flatMap((bp) => colValues.map((n) => `${bp}:col-span-${n}`)),
-    ...gapValues.map((n) => `gap-${n}`),
-    ...bps.flatMap((bp) => gapValues.map((n) => `${bp}:gap-${n}`)),
-  ],
-};
+```css
+@source inline("{ ,}{sm:,md:,lg:,xl:,2xl:}basis-{1/12,2/12,3/12,4/12,5/12,6/12,7/12,8/12,9/12,10/12,11/12,full}");
+@source inline("{ ,}{sm:,md:,lg:,xl:,2xl:}gap-{0,1,2,3,4,5,6,7,8,9,10,11,12,14,16,20,24,28,32,36,40,44,48,52,56,60,64,72,80,96}");
+@source inline("max-w-[1600px]");
+@source inline("max-w-[1800px]");
 ```
 
 ## Tailwind and CSS @container (styles without JS)
