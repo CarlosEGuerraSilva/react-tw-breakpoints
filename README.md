@@ -1,23 +1,23 @@
 # react-tw-breakpoints
 
-Hooks ligeros para breakpoints en React, con dos modos:
+Lightweight React breakpoints, with two modes:
 
-- Viewport: usa `matchMedia` y es global al `window`.
-- Container (real): usa `ResizeObserver` para medir un elemento y devolver su breakpoint.
+- Viewport: uses `matchMedia` and is global to `window`.
+- Container (true per-element): uses `ResizeObserver` to measure an element and return its breakpoint.
 
-Incluye utilidades de condición (largerThan/lessThan/onlyAt) y es tree-shakeable.
+Includes condition helpers (largerThan/lessThan/onlyAt) and is tree-shakeable.
 
-## Instalación
+## Installation
 
 ```sh
 npm install react-tw-breakpoints
 ```
 
-Peer deps: React 18/19 (DOM). Opcionalmente Tailwind si lo usas para estilos.
+Peer deps: React 18/19 (DOM). Tailwind is optional if you use it for styling.
 
-## Breakpoints por defecto
+## Default breakpoints
 
-Viewport y container comparten etiquetas, con sets distintos si lo deseas.
+Viewport and container share labels; you can use different sets if needed.
 
 ```ts
 // src/const/breakpoints.ts
@@ -72,7 +72,7 @@ export const BreakpointContainerValue = {
 } as const;
 ```
 
-## Uso rápido
+## Quick start
 
 ### 1) Viewport
 
@@ -93,7 +93,7 @@ function Example() {
 }
 ```
 
-### 2) Container (real por elemento)
+### 2) Container (true per-element)
 
 ```tsx
 import { useRef } from "react";
@@ -101,7 +101,7 @@ import { useContainerBreakpoint } from "react-tw-breakpoints";
 
 function Card() {
   const ref = useRef<HTMLDivElement>(null);
-  const bp = useContainerBreakpoint(ref); // basado en el ancho del div
+  const bp = useContainerBreakpoint(ref); // based on the element width
   return (
     <div ref={ref} style={{ width: "100%" }}>
       {bp === "xs" && <OneCol />}
@@ -116,48 +116,203 @@ function Card() {
 
 ### useBreakpoint(): StaticBreakpoint
 
-- Devuelve el label activo del viewport.
-- Internamente usa un store con `matchMedia` deduplicado y `useSyncExternalStore`.
+- Returns the active viewport label.
+- Internally uses a store with deduplicated `matchMedia` and `useSyncExternalStore`.
 
 ### useBreakpointCondition(opts): boolean
 
-- `opts`: `{ largerThan?: BP; lessThan?: BP; onlyAt?: BP }` (mutuamente combinables, `onlyAt` tiene prioridad)
-- Evalúa el viewport actual sin listeners duplicados.
+- `opts`: `{ largerThan?: BP; lessThan?: BP; onlyAt?: BP }` (can be combined; `onlyAt` takes precedence)
+- Evaluates the current viewport without duplicate listeners.
 
 ### useBreakpointContainer(): StaticBreakpointContainer
 
-- Igual a `useBreakpoint` pero con el set de “container breakpoints”, también basado en viewport.
-- Útil si quieres dos sistemas de BP basados en `window`.
+- Same as `useBreakpoint` but with the “container breakpoints” set, still based on viewport.
+- Useful if you need two independent breakpoint systems based on `window`.
 
 ### useContainerBreakpoint(ref): StaticBreakpointContainer
 
-- “Container query” real por elemento.
-- Mide el ancho del elemento referenciado con `ResizeObserver` y lo mapea al label.
-- Recomendado para lógica de React dependiente del espacio real del componente.
+- True per-element “container query”.
+- Measures the referenced element width via `ResizeObserver` and maps it to a label.
+- Recommended for React logic that depends on a component’s actual space.
 
-## Tailwind y CSS @container (estilos sin JS)
+## UI Components
 
-Para estilos responsive por contenedor, usa la característica nativa de CSS: `@container`.
+These optional components are provided for convenience when styling with Tailwind.
 
-1. Marca el contenedor:
+## Container
 
-```css
-.card {
-  container-type: inline-size; /* opcional: container-name: card; */
+A centered wrapper with horizontal padding and configurable max width.
+
+Props:
+
+- maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "8xl" | "9xl" | "full" (default: "lg")
+- className?: string
+- children?: React.ReactNode
+
+Notes:
+
+- Renders Tailwind classes: `container mx-auto px-2` plus a corresponding `max-w-*`.
+- For `8xl` and `9xl`, fixed widths are used: `max-w-[1600px]`, `max-w-[1800px]`.
+
+Examples:
+
+```tsx
+import { Container } from "react-tw-breakpoints";
+
+export function Page() {
+  return (
+    <Container maxWidth="xl">
+      <h1>Title</h1>
+      <p>Content</p>
+    </Container>
+  );
 }
 ```
 
-Con Tailwind v4 (propiedades arbitrarias):
+```tsx
+// Full-bleed but centered content with custom styles
+<Container maxWidth="full" className="bg-white/80 backdrop-blur py-6">
+  <Article />
+</Container>
+```
+
+```tsx
+// Extra wide marketing page
+<Container maxWidth="8xl">
+  <Hero />
+</Container>
+```
+
+## Grid (inspired by MUI Grid v2)
+
+A 12‑column CSS grid built with Tailwind utilities. Works as either:
+
+- container = true → grid container (`grid grid-cols-12`) with optional responsive gaps
+- container = false → grid item that sets its `col-span-*` responsively
+
+Props:
+
+- container?: boolean (default: false)
+- gap?: number | { xs?: n; sm?: n; md?: n; lg?: n; xl?: n; "2xl"?: n }
+  - Allowed gap values: 0,1,2,3,4,5,6,7,8,9,10,11,12,14,16,20,24,28,32,36,40,44,48,52,56,60,64,72,80,96
+- size?: number | { xs?: 1..12; sm?: 1..12; md?: 1..12; lg?: 1..12; xl?: 1..12; "2xl"?: 1..12 }
+  - When omitted on items, defaults to 12 (full row)
+- className?: string
+- children: React.ReactNode
+
+Notes:
+
+- `xs` maps to the base class without a prefix; other breakpoints use `sm:`, `md:`, etc.
+- This is not a 1:1 clone of MUI v2 Grid, but aims for a similar ergonomics.
+
+Examples:
+
+```tsx
+import { Grid } from "react-tw-breakpoints";
+
+export function Cards() {
+  return (
+    <Grid container gap={{ xs: 4, md: 8 }}>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <Card className="h-40 bg-slate-100" />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <Card className="h-40 bg-slate-100" />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <Card className="h-40 bg-slate-100" />
+      </Grid>
+    </Grid>
+  );
+}
+```
+
+```tsx
+// Mixed: numeric and responsive props
+<Grid container gap={6} className="mb-6">
+  <Grid size={12}>
+    <Header />
+  </Grid>
+  <Grid size={{ xs: 12, md: 8 }}>
+    <Main />
+  </Grid>
+  <Grid size={{ xs: 12, md: 4 }}>
+    <Sidebar />
+  </Grid>
+  <Grid size={12}>
+    <Footer />
+  </Grid>
+</Grid>
+```
+
+```tsx
+// Nested grids
+<Grid container gap={{ xs: 4, lg: 12 }}>
+  <Grid size={12}>
+    <Grid container gap={4}>
+      <Grid size={{ xs: 6, md: 3 }}>
+        <Tile />
+      </Grid>
+      <Grid size={{ xs: 6, md: 3 }}>
+        <Tile />
+      </Grid>
+      <Grid size={{ xs: 6, md: 3 }}>
+        <Tile />
+      </Grid>
+      <Grid size={{ xs: 6, md: 3 }}>
+        <Tile />
+      </Grid>
+    </Grid>
+  </Grid>
+</Grid>
+```
+
+Tailwind safelist tip (required if classes are generated from JS props):
+
+- If you consume this library inside an app that purges CSS, safelist the grid classes used by dynamic props:
+
+```js
+// tailwind.config.js
+const gapValues = [
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 20, 24, 28, 32, 36, 40, 44,
+  48, 52, 56, 60, 64, 72, 80, 96,
+];
+const colValues = Array.from({ length: 12 }, (_, i) => i + 1);
+const bps = ["sm", "md", "lg", "xl", "2xl"];
+
+module.exports = {
+  // ...
+  safelist: [
+    ...colValues.map((n) => `col-span-${n}`),
+    ...bps.flatMap((bp) => colValues.map((n) => `${bp}:col-span-${n}`)),
+    ...gapValues.map((n) => `gap-${n}`),
+    ...bps.flatMap((bp) => gapValues.map((n) => `${bp}:gap-${n}`)),
+  ],
+};
+```
+
+## Tailwind and CSS @container (styles without JS)
+
+For container‑based responsive styles, use native CSS `@container`.
+
+1. Mark the container:
+
+```css
+.card {
+  container-type: inline-size; /* optional: container-name: card; */
+}
+```
+
+With Tailwind v4 (arbitrary properties):
 
 ```html
 <div class="[container-type:inline-size] card">
   <div class="content">...</div>
-  <!-- ahora puedes usar reglas @container en tu CSS -->
-  <!-- o utilities con @layer y @apply -->
+  <!-- now you can use @container rules in CSS -->
 </div>
 ```
 
-2. Reglas por ancho del contenedor:
+2. Rules by container width:
 
 ```css
 .card .content {
@@ -179,7 +334,7 @@ Con Tailwind v4 (propiedades arbitrarias):
 }
 ```
 
-3. Unidades de contenedor útiles (sin breakpoints):
+3. Useful container units (no breakpoints):
 
 ```css
 .hero {
@@ -187,60 +342,62 @@ Con Tailwind v4 (propiedades arbitrarias):
 }
 ```
 
-Combina: usa `@container` para estilos y `useContainerBreakpoint` solo si necesitas lógica de render.
+Combine: use `@container` for styles and `useContainerBreakpoint` only when you need render logic.
 
-## SSR y StrictMode
+## SSR and StrictMode
 
-- Los hooks usan `useSyncExternalStore` para suscripciones seguras.
-- En SSR devuelven valores base (`xs` o `false`) y se hidratan en el cliente.
-- No hay listeners duplicados en StrictMode.
+- Hooks use `useSyncExternalStore` for safe subscriptions.
+- In SSR they return base values (`xs` or `false`) and hydrate on the client.
+- No duplicate listeners in StrictMode.
 
-## Compatibilidad
+## Compatibility
 
-- `matchMedia`: todos los navegadores modernos.
+- `matchMedia`: all modern browsers.
 - `ResizeObserver`: Chrome/Edge 64+, Safari 13.4+, Firefox 69+.
 - `@container` CSS: Chrome/Edge 105+, Safari 16+, Firefox 110+.
 
-## Preguntas frecuentes
+## FAQ
 
-- ¿Por qué dos tipos de “container breakpoints”?
+- Why two kinds of “container breakpoints”?
 
-  - `useBreakpointContainer` usa viewport con otro set de etiquetas (útil si quieres 2 rejillas globales).
-  - `useContainerBreakpoint` es real por elemento.
+  - `useBreakpointContainer` uses viewport with a different label set (useful if you want two global grids).
+  - `useContainerBreakpoint` is true per element.
 
-- ¿Puedo cambiar los breakpoints?
+- Can I change breakpoints?
 
-  - Sí, edita `src/const/breakpoints.ts` y recompila el paquete.
+  - Yes, edit `src/const/breakpoints.ts` and rebuild the package.
 
-- ¿Tree-shaking?
-  - Sí. `package.json` exporta ESM y `sideEffects: false`. Importa solo lo que uses.
+- Tree‑shaking?
+  - Yes. `package.json` exports ESM with `sideEffects: false`. Import only what you use.
 
-## Desarrollo y publicación
+## Development and publishing
 
-Este paquete utiliza un workflow automático de GitHub Actions para publicar a NPM.
+This package uses a GitHub Actions workflow to publish to NPM.
 
-### Para maintainers
+### For maintainers
 
-1. **Publicación automática**: El paquete se publica automáticamente a NPM cuando se crea un release en GitHub.
+1. Automatic publishing: The package is published to NPM when you create a GitHub release.
 
-2. **Requisitos**:
-   - La versión en `package.json` debe coincidir con el tag del release (ej: si el tag es `v1.2.3`, `package.json` debe tener `"version": "1.2.3"`).
-   - Se requiere configurar el secret `NPM_TOKEN` en el repositorio con un token válido de NPM.
+2. Requirements:
 
-3. **Proceso**:
-   ```bash
-   # 1. Actualizar versión
-   npm version patch|minor|major
-   
-   # 2. Hacer push del tag
-   git push origin --tags
-   
-   # 3. Crear release en GitHub usando el tag
-   # 4. El workflow se ejecutará automáticamente
-   ```
+- The `package.json` version must match the release tag (e.g., tag `v1.2.3` requires `"version": "1.2.3"`).
+- Configure the `NPM_TOKEN` secret in the repository with a valid NPM token.
 
-4. **Publicación manual**: También se puede ejecutar manualmente desde la pestaña "Actions" en GitHub.
+3. Process:
 
-## Licencia
+```bash
+# 1. Bump version
+npm version patch|minor|major
+
+# 2. Push tags
+git push origin --tags
+
+# 3. Create a GitHub release from the tag
+# 4. The workflow will run automatically
+```
+
+4. Manual publish: It can also be triggered from the "Actions" tab on GitHub.
+
+## License
 
 MIT
