@@ -13,32 +13,50 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           registry-url: 'https://registry.npmjs.org'
-          
+          # scope: '@tu-org'  # si el paquete está scoped
+
+      - name: Configure npm auth (project)
+        run: |
+          cat > .npmrc <<'EOF'
+          //registry.npmjs.org/:_authToken=${NPM_TOKEN}
+          always-auth=true
+          registry=https://registry.npmjs.org
+          EOF
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Debug npm config
+        run: |
+          npm config get registry
+          npm whoami || true
+          echo "---- Project .npmrc ----"
+          cat .npmrc
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Build package
         run: npm run build
-        
+
       - name: Verify build output
         run: |
           echo "Checking dist directory contents:"
           ls -la dist/
           echo "Verifying main files exist:"
           test -f dist/index.js && echo "✓ CJS build exists"
-          test -f dist/index.mjs && echo "✓ ESM build exists" 
+          test -f dist/index.mjs && echo "✓ ESM build exists"
           test -f dist/index.d.ts && echo "✓ TypeScript declarations exist"
-          
+
       - name: Check if version matches tag (for release trigger)
         if: github.event_name == 'release'
         run: |
@@ -51,8 +69,8 @@ jobs:
             exit 1
           fi
           echo "✓ Version matches tag"
-          
+
       - name: Publish to NPM
-        run: npm publish
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
