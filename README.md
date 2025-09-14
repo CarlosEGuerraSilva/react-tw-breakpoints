@@ -215,6 +215,32 @@ Combina: usa `@container` para estilos y `useContainerBreakpoint` solo si necesi
 - ¿Tree-shaking?
   - Sí. `package.json` exporta ESM y `sideEffects: false`. Importa solo lo que uses.
 
+## Desarrollo y publicación
+
+Este paquete utiliza un workflow automático de GitHub Actions para publicar a NPM.
+
+### Para maintainers
+
+1. **Publicación automática**: El paquete se publica automáticamente a NPM cuando se crea un release en GitHub.
+
+2. **Requisitos**:
+   - La versión en `package.json` debe coincidir con el tag del release (ej: si el tag es `v1.2.3`, `package.json` debe tener `"version": "1.2.3"`).
+   - Se requiere configurar el secret `NPM_TOKEN` en el repositorio con un token válido de NPM.
+
+3. **Proceso**:
+   ```bash
+   # 1. Actualizar versión
+   npm version patch|minor|major
+   
+   # 2. Hacer push del tag
+   git push origin --tags
+   
+   # 3. Crear release en GitHub usando el tag
+   # 4. El workflow se ejecutará automáticamente
+   ```
+
+4. **Publicación manual**: También se puede ejecutar manualmente desde la pestaña "Actions" en GitHub.
+
 ## Licencia
 
 MIT
