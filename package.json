@@ -1,6 +1,6 @@
 {
   "name": "react-tw-breakpoints",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "useBreakpoint hooks and tw-based components.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
