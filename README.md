@@ -189,14 +189,12 @@ Grid (inspired by MUI Grid v2)
 
 A 12‑column flexbox layout built with Tailwind utilities. Works as either:
 
-- container = true → flex container (`flex flex-wrap`) with optional responsive gaps
+- container = true → flex container (`flex flex-wrap`)
 - container = false → flex item that sets its `basis-*` responsively
 
 Props:
 
 - container?: boolean (default: false)
-- gap?: number | { xs?: n; sm?: n; md?: n; lg?: n; xl?: n; "2xl"?: n }
-  - Allowed gap values: 0,1,2,3,4,5,6,7,8,9,10,11,12,14,16,20,24,28,32,36,40,44,48,52,56,60,64,72,80,96
 - size?: number | { xs?: 1..12; sm?: 1..12; md?: 1..12; lg?: 1..12; xl?: 1..12; "2xl"?: 1..12 }
   - When omitted on items, defaults to 12 (full row)
 - className?: string
@@ -215,7 +213,7 @@ import { Grid } from "react-tw-breakpoints";
 
 export function Cards() {
   return (
-    <Grid container gap={{ xs: 4, md: 8 }}>
+    <Grid container>
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <Card className="h-40 bg-slate-100" />
       </Grid>
@@ -232,7 +230,7 @@ export function Cards() {
 
 ```tsx
 // Mixed: numeric and responsive props
-<Grid container gap={6} className="mb-6">
+<Grid container className="mb-6">
   <Grid size={12}>
     <Header />
   </Grid>
@@ -250,9 +248,9 @@ export function Cards() {
 
 ```tsx
 // Nested grids
-<Grid container gap={{ xs: 4, lg: 12 }}>
+<Grid container>
   <Grid size={12}>
-    <Grid container gap={4}>
+    <Grid container>
       <Grid size={{ xs: 6, md: 3 }}>
         <Tile />
       </Grid>
@@ -276,9 +274,9 @@ Tailwind safelist
 
 ```css
 @source inline("{ ,}{sm:,md:,lg:,xl:,2xl:}basis-{1/12,2/12,3/12,4/12,5/12,6/12,7/12,8/12,9/12,10/12,11/12,full}");
-@source inline("{ ,}{sm:,md:,lg:,xl:,2xl:}gap-{0,1,2,3,4,5,6,7,8,9,10,11,12,14,16,20,24,28,32,36,40,44,48,52,56,60,64,72,80,96}");
 @source inline("max-w-[1600px]");
 @source inline("max-w-[1800px]");
+@source inline("basis-full");
 ```
 
 ## Tailwind and CSS @container (styles without JS)
