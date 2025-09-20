@@ -139,7 +139,7 @@ function Card() {
 
 These optional components are provided for convenience when styling with Tailwind.
 
-## Container
+## Container (Experimental)
 
 A centered wrapper with horizontal padding and configurable max width.
 
@@ -153,6 +153,7 @@ Notes:
 
 - Renders Tailwind classes: `container mx-auto px-2` plus a corresponding `max-w-*`.
 - For `8xl` and `9xl`, fixed widths are used: `max-w-[1600px]`, `max-w-[1800px]`.
+- Check [Tailwind safelist](#tailwind-safelist) if you use this component.
 
 Examples:
 
@@ -183,9 +184,7 @@ export function Page() {
 </Container>
 ```
 
-##
-
-Grid (inspired by MUI Grid v2)
+## Grid (Experimental) (inspired by MUI Grid v2)
 
 A 12‑column flexbox layout built with Tailwind utilities. Works as either:
 
@@ -205,6 +204,7 @@ Notes:
 - `xs` maps to the base class without a prefix; other breakpoints use `sm:`, `md:`, etc.
 - Uses flexbox with `basis-*` classes to create 12-column responsive layouts
 - This is not a 1:1 clone of MUI v2 Grid, but aims for a similar ergonomics.
+- Check [Tailwind safelist](#tailwind-safelist) if you use this component.
 
 Examples:
 
@@ -268,12 +268,24 @@ export function Cards() {
 </Grid>
 ```
 
-Tailwind safelist
+## Tailwind safelist
 
-- If you consume Container or Grid they work out of the box. You may need to add these safelist to your app.css file.
+If you consume Container or Grid they won't work out of the box. You may need to add these safelist to your app.css file because Tailwind didn't detect them.
 
 ```css
 @source inline("{ ,}{sm:,md:,lg:,xl:,2xl:}basis-{1/12,2/12,3/12,4/12,5/12,6/12,7/12,8/12,9/12,10/12,11/12,full}");
+@source inline("max-w-sm");
+@source inline("max-w-md");
+@source inline("max-w-lg");
+@source inline("max-w-xl");
+@source inline("max-w-2xl");
+@source inline("max-w-3xl");
+@source inline("max-w-4xl");
+@source inline("max-w-5xl");
+@source inline("max-w-6xl");
+@source inline("max-w-7xl");
+@source inline("max-w-8xl");
+@source inline("max-w-9xl");
 @source inline("max-w-[1600px]");
 @source inline("max-w-[1800px]");
 @source inline("basis-full");
@@ -362,29 +374,17 @@ Combine: use `@container` for styles and `useContainerBreakpoint` only when you 
 
 This package uses a GitHub Actions workflow to publish to NPM.
 
-### For maintainers
+## Contributing
 
-1. Automatic publishing: The package is published to NPM when you create a GitHub release.
+PRs and issues welcome. Due to recent NPM security issues, PRs that adds new dependencies or updates existing ones may be rejected.
+Thanks for understanding.
 
-2. Requirements:
+To contribute:
 
-- The `package.json` version must match the release tag (e.g., tag `v1.2.3` requires `"version": "1.2.3"`).
-- Configure the `NPM_TOKEN` secret in the repository with a valid NPM token.
-
-3. Process:
-
-```bash
-# 1. Bump version
-npm version patch|minor|major
-
-# 2. Push tags
-git push origin --tags
-
-# 3. Create a GitHub release from the tag
-# 4. The workflow will run automatically
-```
-
-4. Manual publish: It can also be triggered from the "Actions" tab on GitHub.
+1. Fork the repository
+2. Create a new branch
+3. Make your changes
+4. Submit a pull request
 
 ## License
 
