@@ -18,7 +18,7 @@ Example:
  * Check if the current environment is a browser.
  * @returns {boolean} True if running in a browser, false if on the server.
  */
-export const isBrowser = (): boolean => typeof window !== "undefined";
+export const isBrowser = (): boolean => typeof window !== 'undefined';
 ```
 
 ### Server-Side Rendering (SSR) Compatibility
@@ -29,7 +29,7 @@ export const isBrowser = (): boolean => typeof window !== "undefined";
 - Wrap browser-specific logic using the provided utilities:
 
 ```typescript
-import { isBrowser, clientOnly } from "@/utils/ssr-utils";
+import { isBrowser, clientOnly } from '@/utils/ssr-utils';
 
 if (isBrowser()) {
   // Client-side code here
