@@ -2,7 +2,8 @@
 
 Thank you for your interest in contributing to this project! We're excited to have your help in making it better.
 
-> [!WARNING] > **Before starting work on any new features or major changes, please open an issue first to discuss your proposal and get approval.** We don't want you to waste time on work that might not align with the project's direction or get merged.
+> [!WARNING]
+> **Before starting work on any new features or major changes, please open an issue first to discuss your proposal and get approval.** We don't want you to waste time on work that might not align with the project's direction or get merged.
 
 ## Commit Conventions
 
@@ -36,7 +37,8 @@ We aim to keep dependencies minimal and lightweight. When proposing new dependen
 - Is it well-maintained and widely used?
 - Could the functionality be implemented without adding a new dependency?
 
-> [!WARNING] > **PRs that introduce new dependencies without strong justification may be rejected to maintain the project's integrity and performance, especially in light of recent NPM security concerns.**
+> [!WARNING]
+> **PRs that introduce new dependencies without strong justification may be rejected to maintain the project's integrity and performance, especially in light of recent NPM security concerns.**
 
 ## Steps to Contribute
 
