@@ -1,6 +1,21 @@
-# react-tw-breakpoints
+![assets/project.svg](https://raw.githubusercontent.com/CarlosEGuerraSilva/react-tw-breakpoints/refs/heads/main/assets/project.svg)
 
-Lightweight React breakpoints, with two modes:
+<div style="text-align: center;">
+useBreakpoint hooks and tw-based components
+<br>
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CarlosEGuerraSilva/react-tw-breakpoints)
+<a href="https://bundlejs.com/?q=react-tw-breakpoints%40latest&treeshake=%5B*%5D" target="\_parent">
+<img alt="" src="https://deno.bundlejs.com/badge?q=react-tw-breakpoints@latest&treeshake=[*]" />
+</a><a href="https://www.npmjs.com/package/react-tw-breakpoints" target="\_parent">
+<img alt="" src="https://img.shields.io/npm/dm/react-tw-breakpoints.svg" />
+</a><a href="https://twitter.com/carlosedgusi" target="\_parent">
+<img alt="" src="https://img.shields.io/twitter/follow/carlosedgusi.svg?style=social&label=Follow" />
+</a>
+
+</div>
+
+Optimized SSR-friendly React hooks to get the current breakpoint based on:
 
 - Viewport: uses `matchMedia` and is global to `window`.
 - Container (true per-element): uses `ResizeObserver` to measure an element and return its breakpoint.
@@ -370,22 +385,10 @@ Combine: use `@container` for styles and `useContainerBreakpoint` only when you 
 - Tree‑shaking?
   - Yes. `package.json` exports ESM with `sideEffects: false`. Import only what you use.
 
-## Development and publishing
+## Want to contribute?
 
-This package uses a GitHub Actions workflow to publish to NPM.
-
-## Contributing
-
-PRs and issues welcome. Due to recent NPM security issues, PRs that adds new dependencies or updates existing ones may be rejected.
-Thanks for understanding.
-
-To contribute:
-
-1. Fork the repository
-2. Create a new branch
-3. Make your changes
-4. Submit a pull request
+Please read the [contribution guidelines](CONTRIBUTING.md) first.
 
 ## License
 
-MIT
+[MIT](LICENSE)
