@@ -1,6 +1,6 @@
-export * from './useBreakpoint';
-export * from './useBreakpointCondition';
-export * from './useBreakpointContainer';
-export * from './useBreakpointContainerCondition';
-export * from './useContainerBreakpoint';
+export * from './use-breakpoint';
+export * from './use-breakpoint-condition';
+export * from './use-breakpoint-container';
+export * from './use-breakpoint-container-condition';
+export * from './use-container-breakpoint';
 export { StaticBreakpoint } from '../const/breakpoints';

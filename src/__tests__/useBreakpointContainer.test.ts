@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { renderHook } from '@testing-library/react';
-import { useBreakpointContainer } from '../hooks/useBreakpointContainer';
+import { useBreakpointContainer } from '../hooks';
 
 describe('useBreakpointContainer', () => {
 	beforeAll(() => {

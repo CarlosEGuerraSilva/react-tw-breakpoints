@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { renderHook } from '@testing-library/react';
-import { useContainerBreakpoint } from '../hooks/useContainerBreakpoint';
+import { useContainerBreakpoint } from '../hooks';
 import { createRef } from 'react';
 
 describe('useContainerBreakpoint', () => {
