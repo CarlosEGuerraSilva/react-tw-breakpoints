@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ResizeObserverStore } from '../core/resizeObserverStore';
+import { ResizeObserverStore } from '../core/resize-observer-store';
 
 describe('ResizeObserverStore', () => {
 	let store: ResizeObserverStore;

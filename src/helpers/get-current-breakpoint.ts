@@ -1,5 +1,5 @@
 import { BreakpointEnum } from "../const/breakpoints";
-import { getMediaQuery } from "../helpers/getMediaQuery";
+import { getMediaQuery } from "./get-media-query"
 import { StaticBreakpoint } from "../const/breakpoints";
 import { isServer } from "../utils/ssr-utils";
 

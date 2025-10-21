@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useSyncExternalStore } from 'react';
 import { StaticBreakpoint } from '../const/breakpoints';
 import { BreakpointValue, BREAKPOINT_ORDER } from '../const/breakpoints';
-import { mediaQueryStore } from '../core/mediaQueryStore';
+import { mediaQueryStore } from '../core/media-query-store';
 
 /**
  * Custom hook to evaluate breakpoint conditions, combining largerThan, lessThan, and onlyAt.

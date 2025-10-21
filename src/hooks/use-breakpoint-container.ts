@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { useSyncExternalStore } from 'react';
 import { BreakpointContainerEnum, StaticBreakpointContainer } from "../const/breakpoints";
-import { mediaQueryStore } from "../core/mediaQueryStore";
-import { getMediaQuery } from "../helpers/getMediaQuery";
+import { mediaQueryStore } from "../core/media-query-store";
+import { getMediaQuery } from "../helpers/get-media-query";
 import { isServer } from "../utils/ssr-utils";
 
 /**

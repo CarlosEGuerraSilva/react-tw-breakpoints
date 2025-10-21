@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { mediaQueryStore } from '../core/mediaQueryStore';
+import { mediaQueryStore } from '../core/media-query-store';
 
 describe('MediaQueryStore', () => {
 	let mockMatchMedia: ReturnType<typeof vi.fn>;

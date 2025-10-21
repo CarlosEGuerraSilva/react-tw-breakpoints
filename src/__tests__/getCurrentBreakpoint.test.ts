@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { mediaQueryCache } from '../helpers/getMediaQuery';
-import { getCurrentBreakpoint } from '../helpers/getCurrentBreakpoint';
+import { mediaQueryCache } from '../helpers/get-media-query';
+import { getCurrentBreakpoint } from '../helpers/get-current-breakpoint';
 
 describe('getCurrentBreakpoint', () => {
 	beforeEach(() => {

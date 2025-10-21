@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getMediaQuery, mediaQueryCache } from '../helpers/getMediaQuery';
+import { getMediaQuery, mediaQueryCache } from '../helpers/get-media-query';
 
 describe('getMediaQuery', () => {
 	beforeEach(() => {

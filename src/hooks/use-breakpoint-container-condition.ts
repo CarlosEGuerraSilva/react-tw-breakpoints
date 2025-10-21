@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useSyncExternalStore } from 'react';
 import { StaticBreakpointContainer } from '../const/breakpoints';
 import { BreakpointContainerValue, CONTAINER_BREAKPOINT_ORDER } from '../const/breakpoints';
-import { mediaQueryStore } from '../core/mediaQueryStore';
+import { mediaQueryStore } from '../core/media-query-store';
 
 /**
  * Custom hook to evaluate container breakpoint conditions.

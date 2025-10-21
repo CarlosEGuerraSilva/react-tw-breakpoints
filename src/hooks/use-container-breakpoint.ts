@@ -6,7 +6,7 @@ import {
 	CONTAINER_BREAKPOINT_ORDER,
 	StaticBreakpointContainer,
 } from '../const/breakpoints';
-import { resizeObserverStore } from '../core/resizeObserverStore';
+import { resizeObserverStore } from '../core/resize-observer-store';
 
 /**
  * Convert element width to container breakpoint.
