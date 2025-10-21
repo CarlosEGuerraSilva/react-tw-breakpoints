@@ -8,9 +8,9 @@ import type { StaticBreakpoint } from '../const/breakpoints';
  * @returns The current active breakpoint.
  */
 export function useBreakpoint(): StaticBreakpoint {
-	return useSyncExternalStore(
-		breakpointStore.subscribe,
-		getCachedBreakpoint,
-		breakpointStore.getServerSnapshot,
-	);
+  return useSyncExternalStore(
+    breakpointStore.subscribe,
+    getCachedBreakpoint,
+    breakpointStore.getServerSnapshot,
+  );
 }

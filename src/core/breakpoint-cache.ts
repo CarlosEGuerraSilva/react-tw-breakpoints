@@ -10,16 +10,16 @@ let cachedBreakpoint: StaticBreakpoint | null = null;
  * @returns The current breakpoint.
  */
 export const getCachedBreakpoint = (forceRecalculate = false): StaticBreakpoint => {
-	if (isServer()) {
-		return 'xs';
-	}
+  if (isServer()) {
+    return 'xs';
+  }
 
-	if (cachedBreakpoint && !forceRecalculate) {
-		return cachedBreakpoint;
-	}
+  if (cachedBreakpoint && !forceRecalculate) {
+    return cachedBreakpoint;
+  }
 
-	cachedBreakpoint = getCurrentBreakpoint();
-	return cachedBreakpoint;
+  cachedBreakpoint = getCurrentBreakpoint();
+  return cachedBreakpoint;
 };
 
 /**
@@ -27,5 +27,5 @@ export const getCachedBreakpoint = (forceRecalculate = false): StaticBreakpoint 
  * Should be called when media queries change.
  */
 export const clearBreakpointCache = (): void => {
-	cachedBreakpoint = null;
+  cachedBreakpoint = null;
 };

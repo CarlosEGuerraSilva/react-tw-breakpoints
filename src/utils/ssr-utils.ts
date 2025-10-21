@@ -2,7 +2,7 @@
  * Check if the current environment is a browser.
  * @returns {boolean} True if running in a browser, false if on the server.
  */
-export const isBrowser = (): boolean => typeof window !== "undefined";
+export const isBrowser = (): boolean => typeof window !== 'undefined';
 
 /**
  * Check if the current environment is a server.
@@ -16,10 +16,10 @@ export const isServer = (): boolean => !isBrowser();
  * @returns The result of the callback or undefined.
  */
 export const clientOnly = <T>(callback: () => T): T | undefined => {
-	if (isBrowser()) {
-		return callback();
-	}
-	return undefined;
+  if (isBrowser()) {
+    return callback();
+  }
+  return undefined;
 };
 
 /**
@@ -28,10 +28,10 @@ export const clientOnly = <T>(callback: () => T): T | undefined => {
  * @returns The result of the callback or undefined.
  */
 export const serverOnly = <T>(callback: () => T): T | undefined => {
-	if (isServer()) {
-		return callback();
-	}
-	return undefined;
+  if (isServer()) {
+    return callback();
+  }
+  return undefined;
 };
 
 /**
@@ -40,12 +40,9 @@ export const serverOnly = <T>(callback: () => T): T | undefined => {
  * @param serverValue Server value to retrieve on the server (optional).
  * @returns The appropriate value based on the environment or undefined.
  */
-export const ssrSafe = <T>(
-	clientValue: () => T,
-	serverValue?: () => T
-): T | undefined => {
-	if (isBrowser()) {
-		return clientValue();
-	}
-	return serverValue ? serverValue() : undefined;
+export const ssrSafe = <T>(clientValue: () => T, serverValue?: () => T): T | undefined => {
+  if (isBrowser()) {
+    return clientValue();
+  }
+  return serverValue ? serverValue() : undefined;
 };

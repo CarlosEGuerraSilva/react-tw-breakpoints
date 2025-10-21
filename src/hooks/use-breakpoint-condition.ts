@@ -10,37 +10,37 @@ import { mediaQueryStore } from '../core/media-query-store';
  * @returns Whether the current viewport matches the specified condition.
  */
 export function useBreakpointCondition(condition: {
-	largerThan?: StaticBreakpoint;
-	lessThan?: StaticBreakpoint;
-	onlyAt?: StaticBreakpoint;
+  largerThan?: StaticBreakpoint;
+  lessThan?: StaticBreakpoint;
+  onlyAt?: StaticBreakpoint;
 }): boolean {
-	if (!condition.onlyAt && !condition.largerThan && !condition.lessThan) {
-		return true;
-	}
-	const query = useMemo(() => {
-		if (condition.onlyAt) {
-			const min = BreakpointValue[condition.onlyAt];
-			const nextIdx = BREAKPOINT_ORDER.indexOf(condition.onlyAt) + 1;
-			const next = nextIdx < BREAKPOINT_ORDER.length ? BREAKPOINT_ORDER[nextIdx] : null;
-			if (!next) return `(min-width: ${min}px)`;
-			const max = BreakpointValue[next] - 0.02;
-			return `(min-width: ${min}px) and (max-width: ${max}px)`;
-		}
-		const parts: string[] = [];
-		if (condition.largerThan) {
-			const min = BreakpointValue[condition.largerThan];
-			parts.push(`(min-width: ${min + 0.02}px)`);
-		}
-		if (condition.lessThan) {
-			const max = BreakpointValue[condition.lessThan];
-			parts.push(`(max-width: ${max - 0.02}px)`);
-		}
-		return parts.join(' and ');
-	}, [condition.largerThan, condition.lessThan, condition.onlyAt]);
+  if (!condition.onlyAt && !condition.largerThan && !condition.lessThan) {
+    return true;
+  }
+  const query = useMemo(() => {
+    if (condition.onlyAt) {
+      const min = BreakpointValue[condition.onlyAt];
+      const nextIdx = BREAKPOINT_ORDER.indexOf(condition.onlyAt) + 1;
+      const next = nextIdx < BREAKPOINT_ORDER.length ? BREAKPOINT_ORDER[nextIdx] : null;
+      if (!next) return `(min-width: ${min}px)`;
+      const max = BreakpointValue[next] - 0.02;
+      return `(min-width: ${min}px) and (max-width: ${max}px)`;
+    }
+    const parts: string[] = [];
+    if (condition.largerThan) {
+      const min = BreakpointValue[condition.largerThan];
+      parts.push(`(min-width: ${min + 0.02}px)`);
+    }
+    if (condition.lessThan) {
+      const max = BreakpointValue[condition.lessThan];
+      parts.push(`(max-width: ${max - 0.02}px)`);
+    }
+    return parts.join(' and ');
+  }, [condition.largerThan, condition.lessThan, condition.onlyAt]);
 
-	return useSyncExternalStore(
-		(listener) => mediaQueryStore.subscribe(query, listener),
-		() => mediaQueryStore.getSnapshot(query),
-		() => mediaQueryStore.getServerSnapshot(),
-	);
+  return useSyncExternalStore(
+    (listener) => mediaQueryStore.subscribe(query, listener),
+    () => mediaQueryStore.getSnapshot(query),
+    () => mediaQueryStore.getServerSnapshot(),
+  );
 }

@@ -1,21 +1,20 @@
 import { useBreakpoint } from './use-breakpoint';
-import { useBreakpointCondition } from './use-breakpoint-condition';
 import type { StaticBreakpoint } from '../const/breakpoints';
 
 const breakpointOrder: StaticBreakpoint[] = [
-	'xs',
-	'sm',
-	'md',
-	'lg',
-	'xl',
-	'_2xl',
-	'_3xl',
-	'_4xl',
-	'_5xl',
+  'xs',
+  'sm',
+  'md',
+  'lg',
+  'xl',
+  '_2xl',
+  '_3xl',
+  '_4xl',
+  '_5xl',
 ];
 
 const getBreakpointIndex = (bp: StaticBreakpoint): number => {
-	return breakpointOrder.indexOf(bp);
+  return breakpointOrder.indexOf(bp);
 };
 
 /**
@@ -24,8 +23,8 @@ const getBreakpointIndex = (bp: StaticBreakpoint): number => {
  * @returns True if viewport is at or above the breakpoint.
  */
 export const useBreakpointUp = (breakpoint: StaticBreakpoint): boolean => {
-	const current = useBreakpoint();
-	return getBreakpointIndex(current) >= getBreakpointIndex(breakpoint);
+  const current = useBreakpoint();
+  return getBreakpointIndex(current) >= getBreakpointIndex(breakpoint);
 };
 
 /**
@@ -34,8 +33,8 @@ export const useBreakpointUp = (breakpoint: StaticBreakpoint): boolean => {
  * @returns True if viewport is below the breakpoint.
  */
 export const useBreakpointDown = (breakpoint: StaticBreakpoint): boolean => {
-	const current = useBreakpoint();
-	return getBreakpointIndex(current) < getBreakpointIndex(breakpoint);
+  const current = useBreakpoint();
+  return getBreakpointIndex(current) < getBreakpointIndex(breakpoint);
 };
 
 /**
@@ -44,8 +43,8 @@ export const useBreakpointDown = (breakpoint: StaticBreakpoint): boolean => {
  * @returns True if viewport is exactly at the breakpoint.
  */
 export const useBreakpointOnly = (breakpoint: StaticBreakpoint): boolean => {
-	const current = useBreakpoint();
-	return current === breakpoint;
+  const current = useBreakpoint();
+  return current === breakpoint;
 };
 
 /**
@@ -54,11 +53,8 @@ export const useBreakpointOnly = (breakpoint: StaticBreakpoint): boolean => {
  * @param max The maximum breakpoint (exclusive).
  * @returns True if viewport is between the breakpoints.
  */
-export const useBreakpointBetween = (
-	min: StaticBreakpoint,
-	max: StaticBreakpoint,
-): boolean => {
-	const current = useBreakpoint();
-	const currentIndex = getBreakpointIndex(current);
-	return currentIndex >= getBreakpointIndex(min) && currentIndex < getBreakpointIndex(max);
+export const useBreakpointBetween = (min: StaticBreakpoint, max: StaticBreakpoint): boolean => {
+  const current = useBreakpoint();
+  const currentIndex = getBreakpointIndex(current);
+  return currentIndex >= getBreakpointIndex(min) && currentIndex < getBreakpointIndex(max);
 };
