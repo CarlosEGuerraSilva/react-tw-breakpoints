@@ -45,6 +45,12 @@ const handleClick = clientOnly(() => {
 - Prefer server-safe utilities and isomorphic libraries
 - Test components and utilities in SSR environments to ensure compatibility
 
+### Code Changes and File Management
+
+- When generating new files or modifying existing files, always include the file path in the conversation
+- Do not include file paths as comments within the generated code
+- Reference the file path clearly when presenting code changes to maintain clarity and context
+
 ### Dependency Management
 
 - Avoid modifying packages (installing or uninstalling) unless absolutely necessary
