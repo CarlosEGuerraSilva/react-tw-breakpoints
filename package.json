@@ -12,9 +12,6 @@
     "type": "git",
     "url": "git+https://github.com/CarlosEGuerraSilva/react-tw-breakpoints.git"
   },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/react-tw-breakpoints"
-  },
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --minify",
     "test": "vitest",
