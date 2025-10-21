@@ -1,8 +1,10 @@
 ![assets/project.svg](https://raw.githubusercontent.com/CarlosEGuerraSilva/react-tw-breakpoints/refs/heads/main/assets/project.svg)
 
-<div style="text-align: center;">
+<p align="center">
 useBreakpoint hooks and tw-based components
-<br>
+</p>
+
+<div style="display: grid; place-items: center;">
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CarlosEGuerraSilva/react-tw-breakpoints)
 <a href="https://bundlejs.com/?q=react-tw-breakpoints%40latest&treeshake=%5B*%5D" target="\_parent">
