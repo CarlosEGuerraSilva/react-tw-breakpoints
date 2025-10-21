@@ -1,3 +1,5 @@
+import { isBrowser } from "../utils/ssr-utils";
+
 // Global store to deduplicate a single ResizeObserver across elements
 export type ROListener = () => void;
 
@@ -7,7 +9,7 @@ type Entry = {
 	listeners: Set<ROListener>;
 };
 
-const hasRO = typeof window !== 'undefined' && 'ResizeObserver' in window;
+const hasRO = isBrowser() && 'ResizeObserver' in window;
 
 export class ResizeObserverStore {
 	private map = new WeakMap<Element, Entry>();
