@@ -15,6 +15,9 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --minify",
     "test": "vitest",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write src/",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage"
