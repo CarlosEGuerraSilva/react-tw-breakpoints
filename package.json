@@ -16,7 +16,11 @@
     "registry": "https://registry.npmjs.org/react-tw-breakpoints"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --minify"
+    "build": "tsup src/index.ts --format cjs,esm --dts --minify",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "sideEffects": false,
   "keywords": [
@@ -33,10 +37,18 @@
     "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "happy-dom": "^20.0.7",
+    "jsdom": "^27.0.1",
     "tsup": "^8.5.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "clsx": "^2.1.1"
