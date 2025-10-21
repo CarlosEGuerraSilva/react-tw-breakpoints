@@ -3,6 +3,9 @@ import React from "react";
 type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 type ResponsiveProp = number | Partial<Record<Breakpoint, number>>;
 
+/**
+ * Props for the Grid component.
+ */
 export interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
   container?: boolean;
   size?: ResponsiveProp;
@@ -21,7 +24,6 @@ const breakpointPrefix: Record<Breakpoint, string> = {
 
 const VALID_COL_SPANS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const;
 
-// Mapeo de columnas a porcentajes para flexbox
 const COL_TO_BASIS: Record<number, string> = {
   1: "basis-1/12",
   2: "basis-2/12",
@@ -57,6 +59,9 @@ const buildClasses = (prop?: ResponsiveProp) => {
   return classes;
 };
 
+/**
+ * Grid component for creating flexible layouts with responsive column sizes.
+ */
 const Grid: React.FC<GridProps> = ({
   container = false,
   size,

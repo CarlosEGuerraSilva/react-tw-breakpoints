@@ -3,6 +3,7 @@ import { useSyncExternalStore } from 'react';
 import { BreakpointContainerEnum, StaticBreakpointContainer } from "../const/breakpoints";
 import { mediaQueryStore } from "../core/mediaQueryStore";
 import { getMediaQuery } from "../helpers/getMediaQuery";
+import { isServer } from "../utils/ssr-utils";
 
 /**
  * Custom hook to get the current active container breakpoint.
@@ -10,7 +11,7 @@ import { getMediaQuery } from "../helpers/getMediaQuery";
  */
 export function useBreakpointContainer(): StaticBreakpointContainer {
 	const getActiveBreakpoint = () => {
-		if (typeof window === 'undefined') return 'xs';
+		if (isServer()) return 'xs';
 		const entries = Object.entries(BreakpointContainerEnum) as [StaticBreakpointContainer, string][];
 		const active = entries
 			.filter(([_, size]) => getMediaQuery(`(min-width: ${size})`).matches)

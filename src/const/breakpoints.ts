@@ -2,15 +2,15 @@ export type StaticBreakpoint = keyof typeof BreakpointEnum;
 export type StaticBreakpointContainer = keyof typeof BreakpointContainerEnum;
 
 export const BreakpointEnum = {
-	xs: '0px',      // baseline
-	sm: '640px',    // 40rem
-	md: '768px',    // 48rem
-	lg: '1024px',   // 64rem
-	xl: '1280px',   // 80rem
-	_2xl: '1536px', // 96rem
-	_3xl: '1792px', // 112rem
-	_4xl: '2048px', // 128rem
-	_5xl: '2304px', // 144rem
+	xs: '0px',
+	sm: '640px',
+	md: '768px',
+	lg: '1024px',
+	xl: '1280px',
+	_2xl: '1536px',
+	_3xl: '1792px',
+	_4xl: '2048px',
+	_5xl: '2304px',
 } as const;
 
 export const BreakpointValue = {
@@ -26,17 +26,17 @@ export const BreakpointValue = {
 } as const;
 
 export const BreakpointContainerEnum = {
-	xs: '0px',      // baseline
-	sm: '640px',    // 40rem
-	md: '768px',    // 48rem
-	lg: '1024px',   // 64rem
-	xl: '1280px',   // 80rem
-	_2xl: '1536px', // 96rem
-	_3xl: '1792px', // 112rem
-	_4xl: '2048px', // 128rem
-	_5xl: '2304px', // 144rem
-	_6xl: '2560px', // 160rem
-	_7xl: '2816px', // 176rem
+	xs: '0px',
+	sm: '640px',
+	md: '768px',
+	lg: '1024px',
+	xl: '1280px',
+	_2xl: '1536px',
+	_3xl: '1792px',
+	_4xl: '2048px',
+	_5xl: '2304px',
+	_6xl: '2560px',
+	_7xl: '2816px',
 } as const;
 
 export const BreakpointContainerValue = {
@@ -53,7 +53,6 @@ export const BreakpointContainerValue = {
 	_7xl: 2816,
 } as const;
 
-// Breakpoint order for comparison
 export const BREAKPOINT_ORDER: StaticBreakpoint[] = ['xs', 'sm', 'md', 'lg', 'xl', '_2xl', '_3xl', '_4xl', '_5xl'];
 export const CONTAINER_BREAKPOINT_ORDER: StaticBreakpointContainer[] = [
 	'xs', 'sm', 'md', 'lg', 'xl', '_2xl', '_3xl', '_4xl', '_5xl', '_6xl', '_7xl'

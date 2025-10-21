@@ -1,6 +1,5 @@
 import { isBrowser } from "../utils/ssr-utils";
 
-// Global store to deduplicate a single ResizeObserver across elements
 export type ROListener = () => void;
 
 type Entry = {

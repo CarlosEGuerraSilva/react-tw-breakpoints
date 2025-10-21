@@ -1,6 +1,9 @@
 import React from "react";
 import clsx from "clsx";
 
+/**
+ * Props for the Container component.
+ */
 export interface ContainerProps {
   children?: React.ReactNode;
   className?: string;
@@ -39,6 +42,9 @@ const maxWidthClasses: Record<
   full: "max-w-full",
 };
 
+/**
+ * Container component for content layout with configurable max width.
+ */
 const Container: React.FC<ContainerProps> = ({
   children,
   className = "",

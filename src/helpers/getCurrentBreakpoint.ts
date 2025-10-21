@@ -3,7 +3,10 @@ import { getMediaQuery } from "../helpers/getMediaQuery";
 import { StaticBreakpoint } from "../const/breakpoints";
 import { isServer } from "../utils/ssr-utils";
 
-// Get current active breakpoint
+/**
+ * Get current active breakpoint.
+ * @returns The current active breakpoint.
+ */
 export const getCurrentBreakpoint = (): StaticBreakpoint => {
 	if (isServer()) return 'xs';
 

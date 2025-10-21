@@ -8,6 +8,11 @@ import {
 } from '../const/breakpoints';
 import { resizeObserverStore } from '../core/resizeObserverStore';
 
+/**
+ * Convert element width to container breakpoint.
+ * @param width The width in pixels.
+ * @returns The corresponding container breakpoint.
+ */
 function widthToContainerBreakpoint(width: number): StaticBreakpointContainer {
 	let active: StaticBreakpointContainer = 'xs';
 	for (const key of CONTAINER_BREAKPOINT_ORDER) {
@@ -19,10 +24,9 @@ function widthToContainerBreakpoint(width: number): StaticBreakpointContainer {
 }
 
 /**
- * Real container query hook: returns the breakpoint label for the element width.
- * Usage:
- *   const ref = useRef<HTMLDivElement>(null);
- *   const bp = useContainerBreakpoint(ref);
+ * Container query hook that returns the breakpoint label for the element width.
+ * @param ref Reference to the element to observe.
+ * @returns The current container breakpoint.
  */
 export function useContainerBreakpoint(
 	ref: React.RefObject<Element | null>

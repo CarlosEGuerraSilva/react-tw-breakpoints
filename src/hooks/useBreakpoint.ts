@@ -9,7 +9,6 @@ import { getCurrentBreakpoint } from "../helpers/getCurrentBreakpoint";
  * @returns The current active breakpoint.
  */
 export function useBreakpoint(): StaticBreakpoint {
-	// Suscríbete a todos los límites min-width, el snapshot calcula el label vigente
 	const queries = useMemo(() => {
 		const entries = Object.entries(BreakpointEnum) as [StaticBreakpoint, string][];
 		return entries

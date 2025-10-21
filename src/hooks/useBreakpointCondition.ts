@@ -14,7 +14,6 @@ export function useBreakpointCondition(condition: {
 	lessThan?: StaticBreakpoint;
 	onlyAt?: StaticBreakpoint;
 }): boolean {
-	// Sin condición => siempre true, y evitamos subscribirnos a una query vacía
 	if (!condition.onlyAt && !condition.largerThan && !condition.lessThan) {
 		return true;
 	}
@@ -24,7 +23,7 @@ export function useBreakpointCondition(condition: {
 			const nextIdx = BREAKPOINT_ORDER.indexOf(condition.onlyAt) + 1;
 			const next = nextIdx < BREAKPOINT_ORDER.length ? BREAKPOINT_ORDER[nextIdx] : null;
 			if (!next) return `(min-width: ${min}px)`;
-			const max = BreakpointValue[next] - 0.02; // evitar solapes con min del siguiente
+			const max = BreakpointValue[next] - 0.02;
 			return `(min-width: ${min}px) and (max-width: ${max}px)`;
 		}
 		const parts: string[] = [];

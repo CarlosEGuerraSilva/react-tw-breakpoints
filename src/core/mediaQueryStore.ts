@@ -1,6 +1,5 @@
 import { getMediaQuery } from '../helpers/getMediaQuery';
 
-// Listener signature used by the store
 export type StoreListener = () => void;
 
 type Entry = {
@@ -24,15 +23,13 @@ class MediaQueryStore {
 		const listeners = new Set<StoreListener>();
 
 		const onChange = () => {
-			// Notify all React subscribers
 			listeners.forEach((l) => l());
 		};
 
-		// Modern API first, fallback to legacy addListener
 		try {
 			mql.addEventListener('change', onChange as EventListener);
 		} catch {
-			// @ts-ignore - legacy API in older browsers
+			// @ts-ignore
 			mql.addListener?.(onChange);
 		}
 
@@ -48,11 +45,10 @@ class MediaQueryStore {
 		return () => {
 			entry.listeners.delete(listener);
 			if (entry.listeners.size === 0) {
-				// Detach native listener and cleanup when unused
 				try {
 					entry.mql.removeEventListener('change', entry.onChange as EventListener);
 				} catch {
-					// @ts-ignore - legacy API
+					// @ts-ignore
 					entry.mql.removeListener?.(entry.onChange);
 				}
 				this.entries.delete(query);
