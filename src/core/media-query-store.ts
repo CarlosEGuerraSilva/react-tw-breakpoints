@@ -22,7 +22,10 @@ const onChange = () => {
   clearBreakpointCache();
   listeners.forEach((l) => l());
 };
-
+/**
+ * Subscribe to a media query and be notified on changes.
+ * In SSR, no listeners are attached.
+ */
 const subscribe = (listener: () => void) => {
   listeners.add(listener);
 
@@ -45,11 +48,18 @@ const subscribe = (listener: () => void) => {
   };
 };
 
+/**
+ * Return current match state for a query.
+ * In SSR, returns false.
+ */
 const getSnapshot = (query: string): boolean => {
   const mql = getMediaQuery(query);
   return mql?.matches ?? false;
 };
 
+/**
+ * Server snapshot: always false to keep hydration stable.
+ */
 const getServerSnapshot = (): boolean => false;
 
 export const mediaQueryStore = {

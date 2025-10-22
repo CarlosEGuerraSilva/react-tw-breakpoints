@@ -6,6 +6,7 @@ import { mediaQueryStore } from '../core/media-query-store';
 
 /**
  * Custom hook to evaluate container breakpoint conditions.
+ * Returns SSR-safe values: on the server it resolves to false until hydration.
  * @param condition - The container breakpoint condition to evaluate.
  * @returns Whether the current viewport matches the specified breakpoint conditions.
  */

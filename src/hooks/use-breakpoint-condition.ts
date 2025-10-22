@@ -6,6 +6,7 @@ import { mediaQueryStore } from '../core/media-query-store';
 
 /**
  * Custom hook to evaluate breakpoint conditions, combining largerThan, lessThan, and onlyAt.
+ * Returns SSR-safe values: on the server it resolves to false until hydration.
  * @param condition - The breakpoint condition to evaluate.
  * @returns Whether the current viewport matches the specified condition.
  */
