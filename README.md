@@ -30,76 +30,49 @@ Includes condition helpers (largerThan/lessThan/onlyAt) and is tree-shakeable.
 npm install react-tw-breakpoints
 ```
 
-Peer deps: React 18/19 (DOM). Tailwind is optional if you use it for styling.
+Peer deps: React 18/19 (DOM).
+Tailwind is NOT required for the hooks. If you use the experimental UI components (`Container`, `Grid`), Tailwind CSS is required and you must configure a safelist so their dynamic classes are included. See docs/guides/tailwind-safelist.md.
 
-## Default breakpoints
+## Documentation
 
-Viewport and container share labels; you can use different sets if needed.
+- [API Reference](docs/api/api.md)
+  - [Hooks](docs/api/hooks.md)
+  - [Helpers](docs/api/helpers.md)
+  - [Components](docs/api/components.md)
+- [Guides](docs/guides/guides.md)
+  - [Tailwind Safelist Configuration](docs/guides/tailwind-safelist.md)
+  - [CSS Container Queries](docs/guides/css-container-queries.md)
+  - [SSR and Hydration](docs/guides/ssr.md)
+- [Examples](docs/examples/examples.md)
+  - [Viewport Hooks](docs/examples/hooks/viewport-hooks.md)
+  - [Container Hooks](docs/examples/hooks/container-hooks.md)
+  - [Components](docs/examples/components/container.md)
 
-```ts
-// src/const/breakpoints.ts
-export const BreakpointEnum = {
-  xs: "0px",
-  sm: "640px",
-  md: "768px",
-  lg: "1024px",
-  xl: "1280px",
-  _2xl: "1536px",
-  _3xl: "1792px",
-  _4xl: "2048px",
-  _5xl: "2304px",
-} as const;
-export const BreakpointValue = {
-  xs: 0,
-  sm: 640,
-  md: 768,
-  lg: 1024,
-  xl: 1280,
-  _2xl: 1536,
-  _3xl: 1792,
-  _4xl: 2048,
-  _5xl: 2304,
-} as const;
+## Breakpoints
 
-export const BreakpointContainerEnum = {
-  xs: "0px",
-  sm: "640px",
-  md: "768px",
-  lg: "1024px",
-  xl: "1280px",
-  _2xl: "1536px",
-  _3xl: "1792px",
-  _4xl: "2048px",
-  _5xl: "2304px",
-  _6xl: "2560px",
-  _7xl: "2816px",
-} as const;
-export const BreakpointContainerValue = {
-  xs: 0,
-  sm: 640,
-  md: 768,
-  lg: 1024,
-  xl: 1280,
-  _2xl: 1536,
-  _3xl: 1792,
-  _4xl: 2048,
-  _5xl: 2304,
-  _6xl: 2560,
-  _7xl: 2816,
-} as const;
-```
+The library uses Tailwind-aligned breakpoints: `xs` (0px), `sm` (640px), `md` (768px), `lg` (1024px), `xl` (1280px), `_2xl` (1536px), [and more](docs/configuration/breakpoints.md).
+
+Note:
+
+- Hook/constant identifiers use a leading underscore for sizes starting with a number (e.g. `_2xl`, `_3xl`) because TypeScript identifiers cannot start with digits. See [`BreakpointEnum`](src/const/breakpoints.ts).
+- Tailwind class names and component props use the native Tailwind form without underscore (e.g. `2xl`). See [`Grid`](src/components/Grid.tsx).
+
+Scopes:
+
+- Viewport breakpoints are defined up to `_5xl`. See [`BREAKPOINT_ORDER`](src/const/breakpoints.ts).
+- Container breakpoints extend up to `_7xl`. See [`CONTAINER_BREAKPOINT_ORDER`](src/const/breakpoints.ts).
 
 ## Quick start
 
 ### 1) Viewport
 
 ```tsx
-import { useBreakpoint, useBreakpointCondition } from "react-tw-breakpoints";
+import { useBreakpoint, useBreakpointCondition } from 'react-tw-breakpoints';
 
 function Example() {
   const bp = useBreakpoint(); // 'xs' | 'sm' | ...
-  const isLgUp = useBreakpointCondition({ largerThan: "lg" });
-  const onlyMd = useBreakpointCondition({ onlyAt: "md" });
+  const isLgUp = useBreakpointCondition({ largerThan: 'lg' });
+  const onlyMd = useBreakpointCondition({ onlyAt: 'md' });
   return (
     <div>
       <p>Viewport BP: {bp}</p>
@@ -113,275 +86,121 @@ function Example() {
 ### 2) Container (true per-element)
 
 ```tsx
-import { useRef } from "react";
-import { useContainerBreakpoint } from "react-tw-breakpoints";
+import { useRef } from 'react';
+import { useContainerBreakpoint } from 'react-tw-breakpoints';
 
 function Card() {
   const ref = useRef<HTMLDivElement>(null);
   const bp = useContainerBreakpoint(ref); // based on the element width
   return (
-    <div ref={ref} style={{ width: "100%" }}>
-      {bp === "xs" && <OneCol />}
-      {bp === "md" && <TwoCols />}
-      {bp === "lg" && <ThreeCols />}
+    <div ref={ref} style={{ width: '100%' }}>
+      {bp === 'xs' && <OneCol />}
+      {bp === 'md' && <TwoCols />}
+      {bp === 'lg' && <ThreeCols />}
     </div>
   );
 }
 ```
 
-## API
+## API Overview
 
-### useBreakpoint(): StaticBreakpoint
+### Hooks
 
-- Returns the active viewport label.
-- Internally uses a store with deduplicated `matchMedia` and `useSyncExternalStore`.
+**`useBreakpoint()`** - Returns the active viewport breakpoint label.
 
-### useBreakpointCondition(opts): boolean
+**`useBreakpointCondition(opts)`** - Evaluates viewport conditions (`largerThan`, `lessThan`, `onlyAt`).
 
-- `opts`: `{ largerThan?: BP; lessThan?: BP; onlyAt?: BP }` (can be combined; `onlyAt` takes precedence)
-- Evaluates the current viewport without duplicate listeners.
+**`useBreakpointContainer()`** - Container breakpoint set (viewport-based).
 
-### useBreakpointContainer(): StaticBreakpointContainer
+**`useContainerBreakpoint(ref)`** - True per-element breakpoint using `ResizeObserver`.
 
-- Same as `useBreakpoint` but with the “container breakpoints” set, still based on viewport.
-- Useful if you need two independent breakpoint systems based on `window`.
+**Helper Hooks**: `useBreakpointUp`, `useBreakpointDown`, `useBreakpointOnly`, `useBreakpointBetween`
 
-### useContainerBreakpoint(ref): StaticBreakpointContainer
+[Hooks API Reference](docs/api/hooks.md)
 
-- True per-element “container query”.
-- Measures the referenced element width via `ResizeObserver` and maps it to a label.
-- Recommended for React logic that depends on a component’s actual space.
+### Helpers
 
-## UI Components
+**`getCurrentBreakpoint()`** - Synchronously get current breakpoint (SSR-safe).
 
-These optional components are provided for convenience when styling with Tailwind.
+**`getMediaQuery(query)`** - Get cached `MediaQueryList` for custom queries.
 
-## Container (Experimental)
+[Helpers API Reference](docs/api/helpers.md)
 
-A centered wrapper with horizontal padding and configurable max width.
+### Components (Experimental)
 
-Props:
+> [!CAUTION]
+> These components are experimental and may change their API or functionality. They are subject to discussion and improvement proposals, so breaking changes or even removal may occur. Use them at your own risk.
 
-- maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "8xl" | "9xl" | "full" (default: "lg")
-- className?: string
-- children?: React.ReactNode
+There are some basic layout components to use in your application. These are independent of the hooks in this library, so they are not affected by changes to the API for hooks, helpers, etc.
 
-Notes:
+### Why?
 
-- Renders Tailwind classes: `container mx-auto px-2` plus a corresponding `max-w-*`.
-- For `8xl` and `9xl`, fixed widths are used: `max-w-[1600px]`, `max-w-[1800px]`.
-- Check [Tailwind safelist](#tailwind-safelist) if you use this component.
+Many UI libraries don't have basic layout components. You probably need something simple and straightforward like a `<Container>`, and you may not want to have to define it in every project you work on if you use the same UI library or another one that doesn't have one.
 
-Examples:
+- **`Container`** - Centered wrapper with max-width constraints.
+
+- **`Grid`** - 12-column responsive grid system.
+
+[Components API Reference](docs/api/components.md)
+
+## Quick Examples
+
+### Responsive Navigation
 
 ```tsx
-import { Container } from "react-tw-breakpoints";
+import { useBreakpointCondition } from 'react-tw-breakpoints';
 
-export function Page() {
+function Navigation() {
+  const isMobile = useBreakpointCondition({ lessThan: 'lg' });
+
+  return <nav>{isMobile ? <MobileMenu /> : <DesktopMenu />}</nav>;
+}
+```
+
+### Adaptive Card
+
+```tsx
+import { useRef } from 'react';
+import { useContainerBreakpoint } from 'react-tw-breakpoints';
+
+function Card() {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const breakpoint = useContainerBreakpoint(cardRef);
+
   return (
-    <Container maxWidth="xl">
-      <h1>Title</h1>
-      <p>Content</p>
-    </Container>
+    <div ref={cardRef}>
+      {breakpoint === 'xs' && <CompactLayout />}
+      {breakpoint === 'lg' && <ExpandedLayout />}
+    </div>
   );
 }
 ```
 
-```tsx
-// Full-bleed but centered content with custom styles
-<Container maxWidth="full" className="bg-white/80 backdrop-blur py-6">
-  <Article />
-</Container>
-```
+📚 [**More Examples**](docs/examples/examples.md)
 
-```tsx
-// Extra wide marketing page
-<Container maxWidth="8xl">
-  <Hero />
-</Container>
-```
+## Advanced Topics
 
-## Grid (Experimental) (inspired by MUI Grid v2)
+### CSS @container Queries
 
-A 12‑column flexbox layout built with Tailwind utilities. Works as either:
+For style-based container queries without JavaScript, use native CSS `@container`. [Learn more](docs/guides/css-container-queries.md).
 
-- container = true → flex container (`flex flex-wrap`)
-- container = false → flex item that sets its `basis-*` responsively
+### SSR and StrictMode
 
-Props:
+Hooks use `useSyncExternalStore` for safe subscriptions. In SSR they return base values (`xs` or `false`) and hydrate on the client. No duplicate listeners in StrictMode.
 
-- container?: boolean (default: false)
-- size?: number | { xs?: 1..12; sm?: 1..12; md?: 1..12; lg?: 1..12; xl?: 1..12; "2xl"?: 1..12 }
-  - When omitted on items, defaults to 12 (full row)
-- className?: string
-- children: React.ReactNode
+### Browser Compatibility
 
-Notes:
-
-- `xs` maps to the base class without a prefix; other breakpoints use `sm:`, `md:`, etc.
-- Uses flexbox with `basis-*` classes to create 12-column responsive layouts
-- This is not a 1:1 clone of MUI v2 Grid, but aims for a similar ergonomics.
-- Check [Tailwind safelist](#tailwind-safelist) if you use this component.
-
-Examples:
-
-```tsx
-import { Grid } from "react-tw-breakpoints";
-
-export function Cards() {
-  return (
-    <Grid container>
-      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-        <Card className="h-40 bg-slate-100" />
-      </Grid>
-      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-        <Card className="h-40 bg-slate-100" />
-      </Grid>
-      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-        <Card className="h-40 bg-slate-100" />
-      </Grid>
-    </Grid>
-  );
-}
-```
-
-```tsx
-// Mixed: numeric and responsive props
-<Grid container className="mb-6">
-  <Grid size={12}>
-    <Header />
-  </Grid>
-  <Grid size={{ xs: 12, md: 8 }}>
-    <Main />
-  </Grid>
-  <Grid size={{ xs: 12, md: 4 }}>
-    <Sidebar />
-  </Grid>
-  <Grid size={12}>
-    <Footer />
-  </Grid>
-</Grid>
-```
-
-```tsx
-// Nested grids
-<Grid container>
-  <Grid size={12}>
-    <Grid container>
-      <Grid size={{ xs: 6, md: 3 }}>
-        <Tile />
-      </Grid>
-      <Grid size={{ xs: 6, md: 3 }}>
-        <Tile />
-      </Grid>
-      <Grid size={{ xs: 6, md: 3 }}>
-        <Tile />
-      </Grid>
-      <Grid size={{ xs: 6, md: 3 }}>
-        <Tile />
-      </Grid>
-    </Grid>
-  </Grid>
-</Grid>
-```
-
-## Tailwind safelist
-
-If you consume Container or Grid they won't work out of the box. You may need to add these safelist to your app.css file because Tailwind didn't detect them.
-
-```css
-@source inline("{ ,}{sm:,md:,lg:,xl:,2xl:}basis-{1/12,2/12,3/12,4/12,5/12,6/12,7/12,8/12,9/12,10/12,11/12,full}");
-@source inline("max-w-sm");
-@source inline("max-w-md");
-@source inline("max-w-lg");
-@source inline("max-w-xl");
-@source inline("max-w-2xl");
-@source inline("max-w-3xl");
-@source inline("max-w-4xl");
-@source inline("max-w-5xl");
-@source inline("max-w-6xl");
-@source inline("max-w-7xl");
-@source inline("max-w-8xl");
-@source inline("max-w-9xl");
-@source inline("max-w-[1600px]");
-@source inline("max-w-[1800px]");
-@source inline("basis-full");
-```
-
-## Tailwind and CSS @container (styles without JS)
-
-For container‑based responsive styles, use native CSS `@container`.
-
-1. Mark the container:
-
-```css
-.card {
-  container-type: inline-size; /* optional: container-name: card; */
-}
-```
-
-With Tailwind v4 (arbitrary properties):
-
-```html
-<div class="[container-type:inline-size] card">
-  <div class="content">...</div>
-  <!-- now you can use @container rules in CSS -->
-</div>
-```
-
-2. Rules by container width:
-
-```css
-.card .content {
-  display: block;
-}
-
-@container (width >= 640px) {
-  .card .content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-}
-
-@container (width >= 1024px) {
-  .card .content {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-```
-
-3. Useful container units (no breakpoints):
-
-```css
-.hero {
-  padding-inline: 6cqw;
-}
-```
-
-Combine: use `@container` for styles and `useContainerBreakpoint` only when you need render logic.
-
-## SSR and StrictMode
-
-- Hooks use `useSyncExternalStore` for safe subscriptions.
-- In SSR they return base values (`xs` or `false`) and hydrate on the client.
-- No duplicate listeners in StrictMode.
-
-## Compatibility
-
-- `matchMedia`: all modern browsers.
-- `ResizeObserver`: Chrome/Edge 64+, Safari 13.4+, Firefox 69+.
-- `@container` CSS: Chrome/Edge 105+, Safari 16+, Firefox 110+.
+- `matchMedia`: All modern browsers
+- `ResizeObserver`: Chrome/Edge 64+, Safari 13.1+, Firefox 69+
+- CSS `@container`: Chrome/Edge 105+, Safari 16+, Firefox 110+
 
 ## FAQ
 
 - Why two kinds of “container breakpoints”?
-
   - `useBreakpointContainer` uses viewport with a different label set (useful if you want two global grids).
   - `useContainerBreakpoint` is true per element.
 
 - Can I change breakpoints?
-
   - Yes, edit `src/const/breakpoints.ts` and rebuild the package.
 
 - Tree‑shaking?
