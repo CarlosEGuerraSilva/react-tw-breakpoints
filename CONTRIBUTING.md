@@ -45,9 +45,54 @@ We aim to keep dependencies minimal and lightweight. When proposing new dependen
 1. Fork the repository
 2. Create a branch for your feature (`git checkout -b feature/my-feature`)
 3. Make your changes
-4. Commit with conventional messages (`git commit -m "feat(hook): add new hook feature"`)
-5. Push to the branch (`git push origin feature/my-feature`)
-6. Open a Pull Request
+4. Run linting and format checks:
+   ```bash
+   npm run lint
+   npm run format
+   npm run type-check
+   ```
+5. Run tests and ensure they pass:
+   ```bash
+   npm run test:run
+   npm run test:coverage
+   ```
+6. Commit with conventional messages (`git commit -m "feat(hook): add new hook feature"`)
+7. Push to the branch (`git push origin feature/my-feature`)
+8. Open a Pull Request
+
+## Code Quality Requirements
+
+Before submitting a PR, ensure your code meets the following requirements:
+
+### Linting and Formatting
+
+```bash
+npm run lint        # Check for linting errors
+npm run lint:fix    # Fix linting errors automatically
+npm run format      # Format code with Prettier
+```
+
+### Type Checking
+
+```bash
+npm run type-check  # Verify TypeScript types
+```
+
+### Testing
+
+```bash
+npm run test        # Run tests in watch mode
+npm run test:run    # Run tests once
+npm run test:coverage  # Generate coverage report
+```
+
+All tests must pass and maintain or improve code coverage before your PR can be merged.
+
+### Build Verification
+
+```bash
+npm run build       # Ensure the package builds successfully
+```
 
 ## Generated code
 
