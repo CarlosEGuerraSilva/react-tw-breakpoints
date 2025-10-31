@@ -4,6 +4,21 @@ All notable changes to react-tw-breakpoints will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.9] - 2025-10-30
+
+### Added
+
+- Comprehensive test suite for media query store multiple changes in `src/__tests__/mediaQueryStore.multipleChanges.test.ts`
+- Internal testing utilities (`__internal__.clearAllListeners()`) for proper test cleanup
+
+### Fixed
+
+- Critical bug in `mediaQueryStore` where listeners were only triggered on first media query change
+- Media query handlers now use stable references per query to ensure multiple consecutive changes trigger correctly
+- Query-specific event listeners now properly maintained in `queryHandlers` map
+- Memory leaks fixed with proper cleanup of handlers when unsubscribing
+- `useBreakpointCondition` now correctly triggers re-renders on all media query changes, not just the first one
+
 ## [1.2.8] - 2025-10-22
 
 ### Added
