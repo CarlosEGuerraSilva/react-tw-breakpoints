@@ -4,6 +4,8 @@ import { clearBreakpointCache } from './breakpoint-cache';
 
 const listeners = new Set<() => void>();
 const mediaQueries = new Map<string, MediaQueryList>();
+const queryListeners = new Map<string, Set<() => void>>();
+const queryHandlers = new Map<string, () => void>();
 
 const getMediaQuery = (query: string): MediaQueryList | null => {
   if (isServer()) {
@@ -22,6 +24,21 @@ const onChange = () => {
   clearBreakpointCache();
   listeners.forEach((l) => l());
 };
+
+const onQueryChange = (query: string): (() => void) => {
+  if (!queryHandlers.has(query)) {
+    const handler = () => {
+      clearBreakpointCache();
+      const queryListener = queryListeners.get(query);
+      if (queryListener) {
+        queryListener.forEach((l) => l());
+      }
+    };
+    queryHandlers.set(query, handler);
+  }
+  return queryHandlers.get(query)!;
+};
+
 /**
  * Subscribe to a media query and be notified on changes.
  * In SSR, no listeners are attached.
@@ -64,19 +81,30 @@ const getServerSnapshot = (): boolean => false;
 
 export const mediaQueryStore = {
   subscribe: (query: string, listener: () => void) => {
-    listeners.add(listener);
+    if (!queryListeners.has(query)) {
+      queryListeners.set(query, new Set());
+    }
 
-    if (listeners.size === 1) {
+    const queryListener = queryListeners.get(query)!;
+    queryListener.add(listener);
+
+    if (queryListener.size === 1) {
       const mql = getMediaQuery(query);
-      mql?.addEventListener('change', onChange);
+      const handler = onQueryChange(query);
+      mql?.addEventListener('change', handler);
     }
 
     return () => {
-      listeners.delete(listener);
+      queryListener.delete(listener);
 
-      if (listeners.size === 0) {
+      if (queryListener.size === 0) {
         const mql = getMediaQuery(query);
-        mql?.removeEventListener('change', onChange);
+        const handler = queryHandlers.get(query);
+        if (handler) {
+          mql?.removeEventListener('change', handler);
+        }
+        queryListeners.delete(query);
+        queryHandlers.delete(query);
       }
     };
   },
@@ -88,4 +116,17 @@ export const breakpointStore = {
   subscribe,
   getSnapshot: () => true,
   getServerSnapshot: (): StaticBreakpoint => 'xs',
+};
+
+/**
+ * Internal testing utilities.
+ * @internal
+ */
+export const __internal__ = {
+  clearAllListeners: () => {
+    listeners.clear();
+    queryListeners.clear();
+    queryHandlers.clear();
+    mediaQueries.clear();
+  },
 };

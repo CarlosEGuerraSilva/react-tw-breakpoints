@@ -27,5 +27,13 @@ export const getCachedBreakpoint = (forceRecalculate = false): StaticBreakpoint 
  * Should be called when media queries change.
  */
 export const clearBreakpointCache = (): void => {
+  const previous = cachedBreakpoint;
   cachedBreakpoint = null;
+
+  if (previous !== null && !isServer()) {
+    const current = getCurrentBreakpoint();
+    if (previous !== current) {
+      console.debug(`Breakpoint changed: ${previous} -> ${current}`);
+    }
+  }
 };
