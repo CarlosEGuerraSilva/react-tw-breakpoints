@@ -5,6 +5,7 @@ type ResponsiveProp = number | Partial<Record<Breakpoint, number>>;
 
 /**
  * Props for the Grid component.
+ * @deprecated This component is aimed to be removed in next major release.
  */
 export interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
   container?: boolean;
@@ -61,6 +62,7 @@ const buildClasses = (prop?: ResponsiveProp) => {
 
 /**
  * Grid component for creating flexible layouts with responsive column sizes.
+ * @deprecated This component is aimed to be removed in next major release.
  */
 const Grid: React.FC<GridProps> = ({ container = false, size, className = '', children }) => {
   const sizeClasses = buildClasses(size).join(' ');

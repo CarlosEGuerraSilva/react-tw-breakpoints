@@ -3,6 +3,7 @@ import clsx from 'clsx';
 
 /**
  * Props for the Container component.
+ * @deprecated This component is aimed to be removed in next major release.
  */
 export interface ContainerProps {
   children?: React.ReactNode;
@@ -41,6 +42,7 @@ const maxWidthClasses: Record<NonNullable<ContainerProps['maxWidth']>, string> =
 
 /**
  * Container component for content layout with configurable max width.
+ * @deprecated This component is aimed to be removed in next major release.
  */
 const Container: React.FC<ContainerProps> = ({ children, className = '', maxWidth = 'lg' }) => {
   return (
